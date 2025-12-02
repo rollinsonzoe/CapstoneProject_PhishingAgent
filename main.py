@@ -91,16 +91,16 @@ Look out for:
 -Requests for your personal and financial information. Misspelled website or email addresses, like fedx.com or fed-ex.com. Spelling and grammatical errors, or excessive capitalization and exclamation points. Claims that you have won a large sum of money.
 Identify things that \"sound right\" but violate standard procedures:
 -Examples:
-❌ Bank: \"Call our number and enter extension 7293 for fraud department\"
-✅ Real: \"Call the number on your card and ask for fraud department\"
-❌ Court: \"Call us to avoid default judgment\" (voicemail only)
-✅ Real: Certified mail + process server before default
-❌ IRS: \"Call within 2 hours to avoid arrest\"
-✅ Real: Multiple written notices over months before any action
-❌ Tech Support: \"Your computer is infected, call immediately\"
-✅ Real: Antivirus software alerts, not phone calls
+Bank: \"Call our number and enter extension 7293 for fraud department\"
+Real: \"Call the number on your card and ask for fraud department\"
+Court: \"Call us to avoid default judgment\" (voicemail only)
+Real: Certified mail + process server before default
+IRS: \"Call within 2 hours to avoid arrest\"
+Real: Multiple written notices over months before any action
+Tech Support: \"Your computer is infected, call immediately\"
+Real: Antivirus software alerts, not phone calls
 ❌ SSA: \"Your Social Security number has been suspended\"
-✅ Real: SSNs cannot be suspended
+Real: SSNs cannot be suspended
 Legitimate Urgencies:
 24-72 hours for fraud verification
 7-30 days for account updates
