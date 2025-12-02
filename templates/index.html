@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Phishing Detection Agent</title>
+  <style>
+    :root {
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, 'Helvetica Neue', Arial;
+      --bg-card: rgba(255, 255, 255, 0.55);
+      --glass-border: rgba(255, 255, 255, 0.35);
+      --text-color: rgba(0, 0, 0, 0.85);
+    }
+
+    body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      margin: 0;
+      padding: 20px;
+      background: linear-gradient(135deg, rgba(99, 142, 251, 0.7), rgba(98, 245, 198, 0.65)), url('https://grainy-gradients.vercel.app/noise.svg');
+      background-size: cover;
+      backdrop-filter: blur(4px);
+    }
+
+    .card {
+      background: var(--bg-card);
+      border-radius: 18px;
+      border: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+      padding: 26px;
+      max-width: 780px;
+      width: 100%;
+    }
+
+    h1 { margin-top:0; font-size:24px; color: var(--text-color); }
+    label { display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-color); }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 16px; }
+
+    input[type="text"], textarea, input[type="file"] {
+      width: 100%;
+      padding: 8px 12px;
+      border-radius: 14px;
+      border: 1px solid rgba(0,0,0,0.25);
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(14px) saturate(180%);
+      font-size: 15px;
+      outline: none;
+      transition: 0.25s ease;
+      color: var(--text-color);
+      box-sizing: border-box;
+      font-family: monospace;
+    }
+
+    input[type="text"]:focus, textarea:focus { border-color: rgba(0,0,0,0.5); background: rgba(255, 255, 255, 0.28); box-shadow: 0 0 10px rgba(0,0,0,0.3); }
+
+    .controls { display: flex; gap: 10px; align-items: center; margin-top: 16px; }
+
+    button {
+      padding: 8px 12px; border-radius: 10px; border: 0;
+      background: rgba(255, 255, 255, 0.25);
+      color: var(--text-color); font-weight: 600; cursor: pointer;
+      transition: 0.25s ease; backdrop-filter: blur(5px);
+    }
+
+    button:hover { background: rgba(20, 96, 255, 1); color: #fff; transform: translateY(-1px); }
+    button[disabled] { opacity: 0.6; cursor: not-allowed; transform: none; }
+
+    #loading { display: none; font-size: 14px; color: var(--text-color); font-weight: bold; margin-top: 10px; }
+    pre { white-space: pre-wrap; border: 1px solid rgba(0,0,0,0.2); padding: 10px; background-color: rgba(255,255,255,0.18); font-family: monospace; color: var(--text-color); border-radius: 14px; backdrop-filter: blur(12px); margin-top: 10px; }
+  </style>
+</head>
+<body>
+  <main class="card" role="main">
+    <h1>Phishing Detection Agent</h1>
+
+    <div class="row">
+      <div>
+        <label for="textInput">Text input</label>
+        <textarea id="textInput" rows="5" placeholder="Paste email/text here"></textarea>
+      </div>
+
+      <div>
+        <label for="fileInput">File input</label>
+        <input type="file" id="fileInput" name="file" accept="*/*" />
+      </div>
+    </div>
+
+    <div class="controls">
+      <button onclick="sendData()">Analyze</button>
+      <div id="loading">Analyzing... Please wait.</div>
+    </div>
+
+    <pre id="result"></pre>
+  </main>
+
+  <script>
+    async function sendData() {
+      const text = document.getElementById("textInput").value;
+      const fileInput = document.getElementById("fileInput");
+      const loadingElem = document.getElementById("loading");
+      const resultElem = document.getElementById("result");
+
+      if(!text && (!fileInput.files || fileInput.files.length === 0)) {
+        resultElem.innerText = 'Please provide text OR a file before sending.';
+        return;
+      }
+
+      loadingElem.style.display = "block";
+      resultElem.innerText = "";
+
+      try {
+        const formData = new FormData();
+        if(text) formData.append('text', text);
+        if(fileInput.files && fileInput.files.length > 0) formData.append('file', fileInput.files[0]);
+
+        // Send to FastAPI endpoint /analyze
+        const response = await fetch('/analyze', {
+          method: 'POST',
+          body: formData
+        });
+
+        const resultText = await response.text();
+        loadingElem.style.display = "none";
+        resultElem.innerText = resultText;
+      } catch (err) {
+        loadingElem.style.display = "none";
+        resultElem.innerText = "Error: " + err;
+      }
+    }
+  </script>
+</body>
+</html>
